@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcryptjs')
+const ApiError = require('../error/api_error')
 
 const User = mongoose.Schema({
     name: { first: String, last: String },
@@ -16,8 +18,15 @@ const User = mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        select: false,
     }
-}, { versionKey: false, timestamps: false })
+}, { versionKey: false, timestamps: true })
+
+User.pre('save', function (next) {
+
+    this.password = bcrypt.hashSync(this.password, 10)
+    next()
+})
 
 module.exports = mongoose.model('User', User)
