@@ -6,7 +6,7 @@ class ApiError extends Error {
     }
 
     static badRequest(msg) {
-        return new ApiError(400, msg)
+        return new ApiError(400, msg ?? 'Bad Request')
     }
 
     static unprocessableEntity(errors) {
@@ -14,15 +14,15 @@ class ApiError extends Error {
     }
 
     static unauthorized(msg) {
-        return new ApiError(401, msg)
+        return new ApiError(401, msg ?? 'Unauthorized')
     }
 
     static forbidden(msg) {
-        return new ApiError(403, msg)
+        return new ApiError(403, msg ?? 'Forbidden')
     }
 
     static notFound(msg) {
-        return new ApiError(404, msg)
+        return new ApiError(404, msg ?? 'Not Found')
     }
 
     static internal(msg) {

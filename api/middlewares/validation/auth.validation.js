@@ -9,11 +9,17 @@ const validateRequest = (req, res, next) => {
     next()
 }
 
-module.exports.registerValidation = [
-    body('firstName').exists().withMessage('Firstname is required'),
-    body('lastName').exists().withMessage('Lastname is required'),
+module.exports.register = [
+    body('name.first').exists().withMessage('Firstname is required'),
+    body('name.last').exists().withMessage('Lastname is required'),
     body('email').isEmail().withMessage('Please enter a valid email address').normalizeEmail(),
-    body('phone').isMobilePhone().withMessage('Please enter a valid phone number'),
+    body('password').exists().withMessage('Password is required'),
+    validateRequest
+]
+
+
+module.exports.login = [
+    body('email').isEmail().withMessage('Please enter a valid email address').normalizeEmail(),
     body('password').exists().withMessage('Password is required'),
     validateRequest
 ]

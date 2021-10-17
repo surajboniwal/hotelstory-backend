@@ -7,6 +7,10 @@ class ApiResponse {
     static created(data) {
         return new ApiResponse(201, data)
     }
+
+    static success(data) {
+        return new ApiResponse(200, data)
+    }
 }
 
 module.exports = ApiResponse
