@@ -7,6 +7,7 @@ const apiResponseHandler = (data, req, res, next) => {
         if (data instanceof ApiError) {
             return res.status(data.statusCode).json({ status: false, error: data.msg })
         }
+        console.log(data)
         return res.status(500).json({ status: false, error: 'Something went wrong' })
     }
 

@@ -4,6 +4,7 @@ const User = require('./../schemas/user.schema')
 const bcrypt = require('bcryptjs')
 const jwtHelper = require('./../helpers/jwt.helper')
 const jwt = require('jsonwebtoken')
+const nodemailerHelper = require('./../helpers/nodemailer.helper')
 
 class AuthController {
 
@@ -24,9 +25,9 @@ class AuthController {
 
         const verifyToken = jwtHelper.buildAccountVerifyAccessToken(user.id)
 
-        console.log(verifyToken)
+        await nodemailerHelper.sendVerificationEmail(user, verifyToken)
 
-        return next(ApiResponse.created('Registration successful'))
+        return next(ApiResponse.created('Verification mail sent'))
     }
 
     login(req, res, next) {
@@ -36,6 +37,10 @@ class AuthController {
 
         if (!bcrypt.compareSync(req.body.password, req.user.password)) {
             return next(ApiError.unauthorized('Invalid credentials'))
+        }
+
+        if (req.user.accountStatus == 'unverified') {
+            return next(ApiError.forbidden('Account not verified'))
         }
 
         return next(ApiResponse.success({
@@ -52,8 +57,6 @@ class AuthController {
 
             const user = await User.findById(data.id)
 
-            console.log(user)
-
             if (user == undefined) {
                 return next(ApiError.unauthorized())
             }
@@ -62,7 +65,9 @@ class AuthController {
                 return next(ApiError.badRequest('User already verified'))
             }
 
-            await user.update({
+            await User.updateOne({
+                _id: user._id,
+            }, {
                 'accountStatus': 'verified'
             })
 
