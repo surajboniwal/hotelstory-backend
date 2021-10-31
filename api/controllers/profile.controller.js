@@ -1,6 +1,5 @@
 const ApiError = require('../error/api_error')
 const ApiResponse = require('../error/api_response')
-const User = require('../schemas/user.schema')
 
 class AuthController {
 

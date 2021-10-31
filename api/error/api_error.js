@@ -26,7 +26,7 @@ class ApiError extends Error {
     }
 
     static internal(msg) {
-        return new ApiError(500, msg)
+        return new ApiError(500, msg ?? 'Something went wrong')
     }
 
 }
