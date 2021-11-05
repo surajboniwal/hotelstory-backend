@@ -23,6 +23,11 @@ const HotelSchema = mongoose.Schema({
             occupancy: Number,
             available: Number,
             price: Number,
+            images: [{
+                key: String,
+                mimetype: String,
+                size: String,
+            }],
         }],
         select: false
     }

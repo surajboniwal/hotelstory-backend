@@ -3,10 +3,10 @@ const roomsController = require('../../../controllers/hotels/rooms/rooms.control
 const hotelMiddleware = require('./../../../middlewares/hotels.middleware')
 const imagesRouter = require('./images.router')
 
-router.use('/:id/images', hotelMiddleware.getHotelById, imagesRouter)
+router.use('/:roomid/images', hotelMiddleware.getRoom, imagesRouter)
 
 router.get('/', roomsController.getAll)
-router.get('/:roomid', roomsController.getSingle)
+router.get('/:roomid', hotelMiddleware.getRoom, roomsController.getSingle)
 router.post('/', roomsController.addRoom)
 router.delete('/:roomid', roomsController.delete)
 

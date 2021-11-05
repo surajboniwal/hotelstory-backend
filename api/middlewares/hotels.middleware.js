@@ -11,3 +11,15 @@ module.exports.getHotelById = async (req, res, next) => {
     req.hotel = hotel
     next()
 }
+
+
+module.exports.getRoom = async (req, res, next) => {
+    const room = req.hotel.rooms.filter((e) => e.id === req.params.roomid)[0]
+
+    if (room == null || room == undefined) {
+        return next(ApiError.notFound('Room not found'))
+    }
+
+    req.room = room
+    next()
+}

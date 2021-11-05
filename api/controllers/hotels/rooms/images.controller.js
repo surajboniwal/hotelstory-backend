@@ -5,18 +5,18 @@ const Hotel = require('../../../schemas/hotel.schema')
 const mongoose = require('mongoose')
 
 
-class ImagesController {
+class RoomImagesController {
 
     async getAll(req, res, next) {
-        const hotel = req.hotel
-        return next(ApiResponse.success(hotel.images))
+        const room = req.room
+        return next(ApiResponse.success(room.images))
     }
 
 
     async uploadImage(req, res, next) {
-        await Hotel.updateOne({ _id: req.hotel.id }, {
+        await Hotel.updateOne({ '_id': req.hotel.id, 'rooms._id': req.room.id }, {
             '$push': {
-                images: {
+                'rooms.$.images': {
                     key: req.file.key,
                     mimetype: req.file.mimetype,
                     size: req.file.size,
@@ -32,7 +32,7 @@ class ImagesController {
             return next(ApiError.badRequest('Invalid ID'))
         }
 
-        const image = req.hotel.images.filter(e => e.id === req.params.imageid)[0]
+        const image = req.room.images.filter(e => e.id === req.params.imageid)[0]
 
         if (image == null || image == undefined) {
             return next(ApiError.notFound('Image not found'))
@@ -44,8 +44,8 @@ class ImagesController {
             }
 
 
-            const updatedImages = req.hotel.images.filter(e => e.id !== image.id)
-            await Hotel.updateOne({ _id: req.hotel.id }, { images: updatedImages })
+            const updatedImages = req.room.images.filter(e => e.id !== image.id)
+            await Hotel.updateOne({ '_id': req.hotel.id, 'rooms._id': req.room.id }, { 'rooms.$.images': updatedImages })
         })
 
         return next(ApiResponse.success('Image deleted'))
@@ -57,7 +57,7 @@ class ImagesController {
             return next(ApiError.badRequest('Invalid ID'))
         }
 
-        const image = req.hotel.images.filter(e => e.id === req.params.imageid)[0]
+        const image = req.room.images.filter(e => e.id === req.params.imageid)[0]
 
         if (image == null || image == undefined) {
             return next(ApiError.notFound('Image not found'))
@@ -70,4 +70,4 @@ class ImagesController {
     }
 }
 
-module.exports = new ImagesController()
+module.exports = new RoomImagesController()

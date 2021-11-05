@@ -12,16 +12,7 @@ class RoomsController {
 
     async getSingle(req, res, next) {
 
-        if (!mongoose.isValidObjectId(req.params.roomid)) {
-            return next(ApiError.badRequest('Invalid ID'))
-        }
-
-        const room = req.hotel.rooms.filter((e) => e.id == req.params.roomid)[0]
-        if (room == null || room == undefined) {
-            return next(ApiError.notFound('Room not found'))
-        }
-
-        return next(ApiResponse.success(room))
+        return next(ApiResponse.success(req.room))
     }
 
     async delete(req, res, next) {
